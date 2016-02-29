@@ -17,13 +17,13 @@
     return function(){
       var myDeffered = $.Deferred(),context = this;
       var resp = callback.apply(context,arguments);
-        if(isPromise(resp)){
-          resp.done(function(resp2){
-            myDeffered.resolve(resp2);
-          });
-        } else {
-          myDeffered.resolve(resp);
-        }
+      if(isPromise(resp)){
+        resp.done(function(resp2){
+          myDeffered.resolve(resp2);
+        });
+      } else {
+        myDeffered.resolve(resp);
+      }
       return myDeffered.promise();
     };
   };
@@ -42,12 +42,35 @@
     }, wait, immediate,fname);
 
     return function(){
-        context = this;
-        if(myDeffered.state() !== "pending"){
-          myDeffered = $.Deferred();
-        }
-        defResp.apply(context,arguments);
-        return myDeffered.promise();
+      context = this;
+      if(myDeffered.state() !== "pending"){
+        myDeffered = $.Deferred();
+      }
+      defResp.apply(context,arguments);
+      return myDeffered.promise();
+    };
+  };
+
+  foo.lazy.throttle = function(func, wait, options){
+    var context,myDeffered = $.Deferred();
+    var defResp = _.throttle(function(){
+      var resp = func.apply(context, arguments);
+      if(isPromise(resp)){
+        resp.done(function(resp2){
+          myDeffered.resolve(resp2);
+        });
+      } else {
+        myDeffered.resolve(resp);
+      }
+    }, func, wait, options);
+
+    return function(){
+      context = this;
+      if(myDeffered.state() !== "pending"){
+        myDeffered = $.Deferred();
+      }
+      defResp.apply(context,arguments);
+      return myDeffered.promise();
     };
   };
 
