@@ -16,7 +16,7 @@
   foo.lazy.promise = function(callback){
     return function(){
       var myDeffered = $.Deferred(),context = this;
-      var resp = callback.apply(context,arguments);
+      var resp = is.Function(callback) ? callback.apply(context,arguments) : callback;
       if(isPromise(resp)){
         resp.done(function(resp2){
           myDeffered.resolve(resp2);
