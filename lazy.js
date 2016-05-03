@@ -15,7 +15,8 @@
 
   foo.lazy.promise = function (callback) {
     return function () {
-      var myDeffered = $.Deferred(), context = this;
+      var context = this;
+      var myDeffered = $.Deferred();
       var resp = is.Function(callback) ? callback.apply(context, arguments) : callback;
       if (isPromise(resp)) {
         resp.done(function (resp2) {
@@ -28,6 +29,24 @@
     };
   };
 
+  foo.lazy.once = function (callback) {
+    var fname = (callback.name || "___lazy__single__") + getUUID();
+    return function () {
+      var context = this;
+      if (!context.hasOwnProperty(fname)) {
+        context[fname] = $.Deferred();
+        var resp = is.Function(callback) ? callback.apply(context, arguments) : callback;
+        if (isPromise(resp)) {
+          resp.done(function (resp2) {
+            context[fname].resolve(resp2);
+          });
+        } else {
+          context[fname].resolve(resp);
+        }
+      }
+      return context[fname].promise();
+    };
+  };
 
   foo.lazy.debounce = function (func, wait, immediate, _fname) {
     var fname = _fname || ((func.name || "___lazy__debounce__") + getUUID());
