@@ -16,22 +16,54 @@
 
     foo.lazy.ACTIONS = new foo.Enum("CLEAR");
 
-    foo.lazy.promise = function(callback) {
-        return function() {
-            var context = this;
-            var myDeffered = $.Deferred();
-            var resp = is.Function(callback) ? callback.apply(context, arguments) : callback;
-            if (isPromise(resp)) {
-                resp.done(function(resp2) {
-                    myDeffered.resolve(resp2);
-                });
-            } else {
-                myDeffered.resolve(resp);
-            }
-            return myDeffered.promise();
-        };
+    /**
+     * Should be used inside Promise function to get Deferred Object
+     *
+     * @returns {*}
+     * @constructor
+     */
+    foo.lazy.Deferred = function() {
+        return foo.lazy.promise.apply(foo.lazy, arguments);
     };
 
+    /**
+     * Convert any function into Promise.
+     *
+     * TO get DeferredObject to resolve/reject promise, lazy.Deferred(arguments) should be used inside parent function
+     *
+     * @param callback
+     * @returns {*}
+     */
+    foo.lazy.promise = function(callback) {
+        if (is("Arguments", callback)) {
+            return callback[callback.length - 1];
+        } else {
+            return function() {
+                var context = this;
+                var myDeffered = $.Deferred();
+                var args = [].slice.apply(arguments);
+                args.push(myDeffered);
+                var resp = is.Function(callback) ? callback.apply(context, args) : callback;
+                if (isPromise(resp)) {
+                    resp.done(function(resp2) {
+                        myDeffered.resolve(resp2);
+                    }).fail(function(resp2) {
+                        myDeffered.reject(resp2);
+                    });
+                } else if (resp !== undefined) {
+                    myDeffered.resolve(resp);
+                }
+                return myDeffered.promise();
+            };
+        }
+    };
+
+
+    /**
+     *
+     * @param callback
+     * @returns {Function}
+     */
     foo.lazy.once = function(callback) {
         var fname = (callback.name || "___lazy__single__") + foo.getUUID();
         return function() {
@@ -40,17 +72,9 @@
                 delete context[fname];
             }
             if (!context.hasOwnProperty(fname)) {
-                context[fname] = new $.Deferred();
-                var resp = is.Function(callback) ? callback.apply(context, arguments) : callback;
-                if (isPromise(resp)) {
-                    resp.done(function(resp2) {
-                        context[fname].resolve(resp2);
-                    });
-                } else {
-                    context[fname].resolve(resp);
-                }
+                context[fname] = is.Function(callback) ? callback.apply(context, arguments) : callback;
             }
-            return context[fname].promise();
+            return context[fname];
         };
     };
 
