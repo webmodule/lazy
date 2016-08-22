@@ -70,6 +70,7 @@
             var context = this;
             if (arguments[0] === foo.lazy.ACTIONS.CLEAR) {
                 delete context[fname];
+                return;
             }
             if (!context.hasOwnProperty(fname)) {
                 context[fname] = is.Function(callback) ? callback.apply(context, arguments) : callback;
