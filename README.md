@@ -1,5 +1,5 @@
 # lazy
-Be lazy and and wait for it get finshed. lazy.js is a reincarnation of popular javascript concept-functions 
+Be lazy and and wait for it to get finshed. lazy.js is a reincarnation of popular javascript concept-functions 
 with more advanced features.
 
 
