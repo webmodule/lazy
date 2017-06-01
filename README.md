@@ -111,3 +111,9 @@ Makes function throttle (executes only after particluar gap) but with promise fu
    
 ```
 
+Installation
+```
+bower install webmodules-lazy
+
+```
+
