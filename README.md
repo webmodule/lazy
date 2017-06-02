@@ -1,7 +1,5 @@
 # lazy
-Be lazy and and wait for it get finshed. lazy.js is a reincarnation of popular javascript concept-functions 
-with more advanced features.
-
+Promise-ify your functions, debounced functions, throttled functions using lazy.js.
 
 ## lazy.promise([Fucntion|Promise])
 Convert any function into Promise.
