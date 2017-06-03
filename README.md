@@ -1,7 +1,11 @@
 # lazy
-Be lazy and and wait for it get finshed. lazy.js is a reincarnation of popular javascript concept-functions 
-with more advanced features.
+Promise-ify your functions, debounced functions, throttled functions using lazy.js. Currently you can promisify the following: 
+- [Simple functions](#lazypromisefucntionpromise)
+- [Debounced functions](#lazydebouncefucntion)
+- [Throttled functions](#lazythrottlefucntion)
 
+It also includes additional features like:
+- [lazy.once()](#lazyoncefucntion) : to make a function executable only once
 
 ## lazy.promise([Fucntion|Promise])
 Convert any function into Promise.
@@ -29,28 +33,6 @@ Convert any function into Promise.
       // resp is always details of uid:7 sent from server
    });
 ```
-
-## lazy.once([Fucntion])
-Makes function executable only once (first time it was called) and saves the output to return next time onward per instance.
-```javascript
-  var myTestInstance = {
-    myTestOnceFun : lazy.once(function(a,b){
-        //use a and b to calculate return value
-        return a+b;
-    }),
-     myTestOnceFunWithAjax : lazy.once(function(url,data){
-        //use a and b to calculate c
-        return jQuery.get(url,data);
-    }),
-   };
-   
-   //Calling these functions
-   myTestInstance.myTestOnceFun(2,5); // == 7 every time.
-   myTestInstance.myTestOnceFunWithAjax().done(function(resp){
-      // resp is always details of uid:7 sent from server
-   });
-```
-
 
 
 ## lazy.debounce([Fucntion])
@@ -110,4 +92,27 @@ Makes function throttle (executes only after particluar gap) but with promise fu
    });
    
 ```
+
+
+## lazy.once([Fucntion])
+Makes function executable only once (first time it was called) and saves the output to return next time onward per instance.
+```javascript
+  var myTestInstance = {
+    myTestOnceFun : lazy.once(function(a,b){
+        //use a and b to calculate return value
+        return a+b;
+    }),
+     myTestOnceFunWithAjax : lazy.once(function(url,data){
+        //use a and b to calculate c
+        return jQuery.get(url,data);
+    }),
+   };
+   
+   //Calling these functions
+   myTestInstance.myTestOnceFun(2,5); // == 7 every time.
+   myTestInstance.myTestOnceFunWithAjax().done(function(resp){
+      // resp is always details of uid:7 sent from server
+   });
+```
+
 
