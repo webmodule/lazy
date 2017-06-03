@@ -113,7 +113,7 @@ Makes function executable only once (first time it was called) and saves the out
       // resp is always details of uid:7 sent from server
    });
 ```
-#Installation
+# Installation
 ```
 bower install webmodules-lazy
 
