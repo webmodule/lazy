@@ -93,7 +93,6 @@ Makes function throttle (executes only after particluar gap) but with promise fu
    
 ```
 
-
 ## lazy.once([Fucntion])
 Makes function executable only once (first time it was called) and saves the output to return next time onward per instance.
 ```javascript
@@ -114,5 +113,9 @@ Makes function executable only once (first time it was called) and saves the out
       // resp is always details of uid:7 sent from server
    });
 ```
+#Installation
+```
+bower install webmodules-lazy
 
+```
 
